@@ -1,0 +1,28 @@
+from deepface import DeepFace
+
+# List of detector backends to use
+detector_list = ['opencv', 'retinaface', 'mtcnn', 'ssd', 'centerface']
+
+# Iterate through each detector backend
+for detector in detector_list:
+    # Perform analysis for age, emotion, race, and gender
+    analysis_results = DeepFace.analyze(
+        img_path='x.png',
+        actions=["age", "emotion", "race", "gender"],  # Ensure all desired actions are included
+        enforce_detection=False,  # Set to True if you want to enforce face detection
+        detector_backend=detector
+    )
+
+    # Check if analysis found any faces and iterate through each detected face
+    for face_data in analysis_results:
+        # Extract dominant emotion and its score
+        dominant_emotion = face_data['dominant_emotion']
+        emotion_score = face_data['emotion'][dominant_emotion]  # Get the score for the dominant emotion
+
+        # Extract dominant gender and race
+        dominant_gender = face_data['dominant_gender']
+        dominant_race = face_data['dominant_race']
+
+        # Print the results in a concise English format
+        print(
+            f"Detector: {detector}, Emotion: {dominant_emotion} ({emotion_score:.2f}%), Gender: {dominant_gender}, Race: {dominant_race}")
